@@ -4,11 +4,25 @@
 REPO_URL=$1
 
 # Start the new setup
-git init
-git checkout -b main
+if [ ! -d ".git" ]; then
+  git init
+fi
+
+if [ ! -z "$(git branch --list main)" ]; then
+  git checkout main
+else
+  git checkout -b main
+fi
+
 git add .
 git commit -m "Initial commit"
-git remote add origin $REPO_URL
+
+if [ ! -z "$(git remote --list origin)" ]; then
+  git remote set-url origin $REPO_URL
+else
+  git remote add origin $REPO_URL
+fi
+
 git push -u origin main
 
 # Install dependencies
